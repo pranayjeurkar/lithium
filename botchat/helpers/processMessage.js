@@ -12,17 +12,35 @@ const sendTextMessage = (senderId, text) => {
  }
  });
 };
+
+function getLuisIntent(senderId, utterance) {
+
+var endpoint = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/1744c2b5-be97-4816-820c-617c812e199c?subscription-key=0e079552e3fa4302bb49b4ea78809cfc&spellCheck=true&bing-spell-check-subscription-key=0e079552e3fa4302bb49b4ea78809cfc&timezoneOffset=-360&q='+ utterance;
+console.log(endpoint);
+request(endpoint,
+        function (err,
+            response, body) {
+
+            // HTTP Response
+            if (err)
+                console.log(err);
+            else {
+
+                var data = JSON.parse(body);
+            	console.log(data);
+
+ 
+sendTextMessage(senderId,data.entities[0].type);
+
+            }
+        });
+};
 module.exports = (event) => {
 	console.log("asasas");
  const senderId = event.sender.id;
  const message = event.message.text;
- if(message == 'hi')
- {
-sendTextMessage(senderId,"Hi! My name is CheggBot"); 		
- }
- else
- {
-sendTextMessage(senderId,"Hi! I am CheggBot");
- }
-
+             	 returnMessage = getLuisIntent(senderId,message);
+ 		
+ 
+ 
 };
